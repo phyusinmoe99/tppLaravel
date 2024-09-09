@@ -17,51 +17,57 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
-        //
+        return view('products.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
-        //
+        Product::create([
+            'name'=> $request->name,
+            'status'=>$request->status,
+            'description'=>$request->description,
+            'price'=>$request->price,
+        ]);
+        return redirect()->route('products.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Product $product)
+
+
+
+    public function edit($id)
     {
-        //
+        //dd($id);
+        $product = Product::where('id',$id)->first();
+        //dd($products);
+        return view('products.edit',compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
+
+    public function update(Request $request, $id)
     {
-        return view('products.edit');
+        $product = Product::where('id',$id)->first();
+        $product->update([
+            'name'=> $request->name,
+            'status'=>$request->status,
+            'description'=>$request->description,
+            'price'=>$request->price,
+
+        ]);
+        return redirect()->route('products.index');
+
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Product $product)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+        $product = Product::where('id',$id)->first();
+        $product->delete();
+
+        return redirect()->route('products.index');
+
     }
 }
