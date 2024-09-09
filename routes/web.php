@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,3 +37,8 @@ Route::get('/',function(){
 
 Route::get('/students',[StudentController::class,'index']);
 Route::get('/articles',[ArticlesController::class,'index']);
+Route::get('/categories',[CategoryController::class,'index']);
+Route::get('/categories/create',[CategoryController::class,'create'])->name('categories.create');
+Route::get('/categories/edit',[CategoryController::class,'edit'])->name('categories.edit');
+Route::get('/products',[ProductController::class,'index']);
+Route::get('/products/edit',[ProductController::class,'edit'])->name('products.edit');
