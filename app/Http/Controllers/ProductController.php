@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -24,14 +25,13 @@ class ProductController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        Product::create([
-            'name'=> $request->name,
-            'status'=>$request->status,
-            'description'=>$request->description,
-            'price'=>$request->price,
-        ]);
+        //dd($request);
+
+        $data = $request->validated();
+        $data['status'] = $request->has('status')? true : false;
+        Product::create($data);
         return redirect()->route('products.index');
     }
 
@@ -47,16 +47,13 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request)
     {
-        $product = Product::where('id',$id)->first();
-        $product->update([
-            'name'=> $request->name,
-            'status'=>$request->status,
-            'description'=>$request->description,
-            'price'=>$request->price,
-
-        ]);
+        //dd($request->id);
+        $product = Product::where('id',$request->id)->first();
+        $updateData = $request->validated();
+        $updateData['status']=$request->has('status') ? true : false;
+        $product->update($updateData);
         return redirect()->route('products.index');
 
     }
