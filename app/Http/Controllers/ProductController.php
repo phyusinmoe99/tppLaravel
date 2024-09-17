@@ -14,10 +14,11 @@ class ProductController extends Controller
 
     public function __construct(ProductRepositoryInterface $productRepository)
     {
-        // $this->middleware('auth');
+        $this->middleware('auth');
         $this->productRepository = $productRepository;
 
     }
+
     public function index()
     {
         // $products = Product::all();
@@ -25,13 +26,11 @@ class ProductController extends Controller
         return view('products.index', compact('products'));
     }
 
-
     public function create()
     {
         $categories = Category::all();
         return view('products.create',compact('categories'));
     }
-
 
     public function store(ProductRequest $request)
     {
@@ -47,12 +46,10 @@ class ProductController extends Controller
             $data['image'] = $imageName;
            // $data = array_merge($data, ['image' => $imageName]);
         }
-        Product::create($data);
+        $this->productRepository->store($data);
+
         return redirect()->route('products.index');
     }
-
-
-
 
     public function edit($id)
     {

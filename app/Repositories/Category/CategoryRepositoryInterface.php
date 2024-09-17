@@ -2,8 +2,11 @@
 
 namespace App\Repositories\Category;
 
+use Illuminate\Http\Request;
+
 interface CategoryRepositoryInterface{
     public function index();
     public function show($id);
+    public function store($data);
 
 }

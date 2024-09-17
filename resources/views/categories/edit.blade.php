@@ -7,6 +7,12 @@
         <label for="name">Name</label>
         <input type="text" name="name" id="name" placeholder="Edit Name:"
             class="border border-gray-800" value="{{$category->name}}">
+            <div>
+                @foreach ($category->categoryAttachments as $img )
+                <img src="{{asset('CategoryImages/'.$img->image)}}" alt="" srcset="" style="width: 100px;height:100px" />
+
+                @endforeach
+            </div>
         <button type="submit" name="submit" class="border border-yellow-600 p-2 rounded-lg">Edit</button>
         <div>
             <a href="{{ route('categories.index') }}"

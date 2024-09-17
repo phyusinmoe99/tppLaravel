@@ -14,8 +14,8 @@ class CategoryController extends Controller
 
     public function __construct(CategoryRepositoryInterface $categoryRepository)
     {
-        // $this->middleware('auth');
-        $this->categoryRepository=$categoryRepository;
+        $this->middleware('auth');
+        $this->categoryRepository = $categoryRepository;
     }
 
     public function index()
@@ -24,34 +24,29 @@ class CategoryController extends Controller
         return view('categories.index', compact('category'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
         return view('categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(CategoryRequest $request)
     {
-       $data =$request->validated();
-       $category = Category::create($data);
-       if($request->hasFile('images')){
-        //  dd($request->file('images'));
-        foreach ($request->file('images') as $image) {
+        $data = $request->validated();
+        $category = $this->categoryRepository->store($data);
 
-            $categoryImageName = time() . '.' . $image->getClientOriginalName();
-            $image->storeAs('CategoryImages' , $categoryImageName);
-            CategoryAttachment::create([
-                'category_id' =>$category->id,
-                'image'=>$categoryImageName,
-            ]);
-
+        if ($request->hasFile('images')) {
+            //  dd($request->file('images'));
+            foreach ($request->file('images') as $image) {
+                $categoryImageName = time() . '.' . $image->getClientOriginalName();
+                $image->storeAs('CategoryImages', $categoryImageName);
+                CategoryAttachment::create([
+                    'category_id' => $category->id,
+                    'image' => $categoryImageName,
+                ]);
+            }
         }
-       }
         return redirect()->route('categories.index');
     }
 
