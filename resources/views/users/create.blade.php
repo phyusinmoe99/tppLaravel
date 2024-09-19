@@ -3,7 +3,7 @@
     <div class="app-main__outer">
         <div class="app-main__inner">
             <div>
-                
+
                 <form action="{{ route('users.store') }}" method="post">
                     @csrf
 
@@ -22,6 +22,14 @@
                     <div>
                         <label for="password_confirmation">Comfirm Password : </label>
                         <input type="password" name="password_confirmation" id="password_confirmation" />
+                    </div>
+                    <div>
+                        <label for="role">Select Role : </label>
+                        <select name="role" id="role">
+                            @foreach ($roles as $role )
+                            <option value="{{$role->id}}">{{$role->name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <button type="submit" name="submit">Create</button>

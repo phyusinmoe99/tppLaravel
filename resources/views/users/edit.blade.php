@@ -4,16 +4,20 @@
         <div class="app-main__inner">
             <div>
 
-                <form action="{{ route('users.update',$data->id) }}" method="post">
+                <form action="{{ route('users.update', $data->id) }}" method="post">
                     @csrf
 
                     <div>
                         <label for="name">Name : </label>
-                        <input type="text" name="name" id="name" value="{{$data->name}}" />
+                        <input type="text" name="name" id="name" value="{{ $data->name }}" />
                     </div>
                     <div>
-                        <label for="email">Email : </label>
-                        <input type="email" name="email" id="email" value="{{$data->email}}" />
+                        <select name="role" id="role">
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}" {{$role->id == $selectRoleId ? 'selected' : ''}}>
+                                    {{ $role->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div>
                         <button type="submit" name="submit">Update</button>
