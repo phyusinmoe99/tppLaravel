@@ -16,6 +16,6 @@ class UserRepository implements UserRepositoryInterface
     }
     public function show($id)
     {
-        return User::where('id', $id)->first();
+        return User::with('roles')->findOrFail($id);
     }
 }

@@ -9,6 +9,11 @@
                         <label for="name">Role Name:</label>
                         <input type="tel" name="name" id="name" placeholder="Enter Role Name">
                     </div>
+                    @foreach ($permissions as $permission )
+                    <input type="checkbox" name="permissions[]" value="{{$permission->name}}">
+                    <label for="permission[]">{{$permission->name}}</label>
+
+                    @endforeach
                     <button type="submit">Create</button>
                 </form>
             </div>

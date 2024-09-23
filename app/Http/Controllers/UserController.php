@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::with('permissions')->get();
         // dd($roles);
         return view('users.create',compact('roles'));
     }
@@ -33,10 +33,21 @@ class UserController extends Controller
     {
         // dd($request->all());
         $data = $request->validated();
+        // dd($data);
 
         $data['password'] = Hash::make($data['password']);
+
+
+        if($request->hasFile('profile')){
+            // dd('has');
+            $profileName = time(). '.' . $request->file('profile')->getClientOriginalExtension();
+            // dd($profileName);
+            $request->profile->storeAs('profileImage',$profileName);
+            $data['image'] = $profileName ;
+        }
         $role = Role::findOrFail($data['role']);
         $user = $this->userRepository->store($data);
+        // dd($user);
         $user->assignRole($role->name);
 
         return redirect()->route('users.index');
@@ -45,9 +56,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
         $data = $this->userRepository->show($id);
-        foreach($data->roles as $role){
-            $selectRoleId = $role->id;
-        }
+
         // dd($data->roles);
         return view('users.edit', compact('data','roles'));
     }
@@ -58,6 +67,7 @@ class UserController extends Controller
         $role = Role::findOrFail($request->role);
         $data->update([
             'name' => $request->name,
+            'status' => $request->status
         ]);
         $data->syncRoles($role->name);
 

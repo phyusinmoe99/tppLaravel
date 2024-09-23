@@ -9,8 +9,14 @@
 
                 <ul>
                     @foreach ($users as $user)
+                        {{-- {{dd($user)}} --}}
                         <li>
-                            {{ $user->name }} | {{ $user->email }} |
+                            <div>
+                                <img src="{{ asset('profileImage/' . $user->image) }}" alt="">
+                            </div>
+                            <div>
+                                {{ $user->name }} | {{ $user->email }} | {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                            </div>
                             @foreach ($user->roles as $role)
                                 Role : {{ $role->name }}
                             @endforeach

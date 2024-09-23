@@ -4,7 +4,7 @@
         <div class="app-main__inner">
             <div>
 
-                <form action="{{ route('users.store') }}" method="post">
+                <form action="{{ route('users.store') }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div>
@@ -24,13 +24,39 @@
                         <input type="password" name="password_confirmation" id="password_confirmation" />
                     </div>
                     <div>
-                        <label for="role">Select Role : </label>
-                        <select name="role" id="role">
-                            @foreach ($roles as $role )
-                            <option value="{{$role->id}}">{{$role->name}}</option>
-                            @endforeach
+                        <label for="profile">Select Profile :</label>
+                        <input type="file" name="profile" id="profile"/>
+                    </div>
+                    <div>
+                        <select name="status" id="status">
+                            <option value="0">Inactive</option>
+                            <option value="1">Active</option>
                         </select>
                     </div>
+                    <div>
+                        <label for="role">Select Role : </label>
+                        <select name="role" id="role">
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->id }}">{{ $role->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @foreach ($roles as $role)
+                            <h2>{{ $role->name }}</h2>
+                            <ul>
+                                @foreach ($role->permissions as $permission)
+                                    <li>
+                                        {{ $permission->name }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @endforeach
+
+
+
+                    </div>
+
+
                     <div>
                         <button type="submit" name="submit">Create</button>
                     </div>

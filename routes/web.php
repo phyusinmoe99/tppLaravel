@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StudentController;
@@ -75,6 +76,7 @@ Route::post('/users/delete/{id}',[UserController::class,'destroy'])->name('users
 
 Auth::routes(['register'=>false]);
 Route::resource('/role', RoleController::class);
+Route::resource('/permission',PermissionController::class);
 
 
 
