@@ -21,8 +21,18 @@ class ProductController extends BaseController
     public function index()
     {
         $data = $this->productRepository->index();
-        
-        return $this->sendResponse($data, 'Product retrived successfully!', 200);
+        foreach ($data as $d) {
+            $response[]=[
+                'id' => $d->id,
+                'name' => $d->name,
+                'status' => $d->status,
+                'description' => $d->description,
+                'price' => $d->price,
+                'image' => $d->image,
+                'category_name' => $d->category ? $d->category->name : null,
+            ];
+        }
+        return $this->sendResponse($response, 'Product retrived successfully!', 200);
     }
 
 
