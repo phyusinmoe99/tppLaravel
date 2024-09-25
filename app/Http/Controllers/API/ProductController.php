@@ -4,9 +4,12 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\ProductResource;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -21,17 +24,9 @@ class ProductController extends BaseController
     public function index()
     {
         $data = $this->productRepository->index();
-        foreach ($data as $d) {
-            $response[]=[
-                'id' => $d->id,
-                'name' => $d->name,
-                'status' => $d->status,
-                'description' => $d->description,
-                'price' => $d->price,
-                'image' => $d->image,
-                'category_name' => $d->category ? $d->category->name : null,
-            ];
-        }
+
+        $response = ProductResource::collection($data);
+
         return $this->sendResponse($response, 'Product retrived successfully!', 200);
     }
 
@@ -50,8 +45,17 @@ class ProductController extends BaseController
         if ($validateProduct->fails()) {
             return $this->error('Validation Error', $validateProduct->errors(), 422);
         }
-
-        $product = $this->productRepository->store($request->all());
+        if ($request->hasFile('image')) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('productImages'), $imageName);
+        }
+        $product = $this->productRepository->store([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'image' => $imageName,
+        ]);
         return $this->sendResponse($product, 'Product created successfully', 201);
     }
 
@@ -63,8 +67,9 @@ class ProductController extends BaseController
         if (!$product) {
             return $this->error('Product not Found', null, 404);
         }
+         $result = new ProductResource($product);
 
-        return $this->sendResponse($product, 'Product show successfully', 200);
+        return $this->sendResponse($result, 'Product show successfully', 200);
     }
 
 

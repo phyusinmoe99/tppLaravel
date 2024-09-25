@@ -32,9 +32,7 @@ class CategoryController extends BaseController
         if ($validator->fails()) {
             return $this->error('Validation Error', $validator->errors(), 422);
         }
-        // $category = Category::create([
-        //     'name' => $request->name,
-        // ]);
+        // if()
         $category = $this->categoryRepository->store($request->all());
         return $this->sendResponse($category, 'Category created successfully', 201);
     }

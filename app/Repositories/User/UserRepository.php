@@ -8,7 +8,7 @@ class UserRepository implements UserRepositoryInterface
 {
     public function index()
     {
-        return User::all();
+        return User::with('roles')->get();
     }
     public function store($data)
     {
@@ -16,6 +16,6 @@ class UserRepository implements UserRepositoryInterface
     }
     public function show($id)
     {
-        return User::with('roles')->findOrFail($id);
+        return User::with('roles')->find($id);
     }
 }
